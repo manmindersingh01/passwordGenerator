@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -8,6 +8,9 @@ function App() {
   let [length, setLength] = useState(8);
   let [nums, setNums] = useState(false);
   let [char, setChar] = useState(false);
+
+  const passRef = useRef(null);
+
 
   const generate = useCallback(() => {
 
@@ -32,6 +35,13 @@ function App() {
   useEffect(() => {
     generate();
   }, [generate, length, nums, char])
+
+  const copyPassToClip = () => {
+    passRef.current?.select();
+    window.navigator.clipboard.writeText(pass);
+  }
+
+
   return (
     <>
       <div className=' h-screen w-screen bg-gray-950 flex flex-col items-center'>
@@ -40,9 +50,12 @@ function App() {
             value={pass}
             placeholder='password'
             readOnly
+            ref={passRef}
           />
 
-          <button className=' text-orange-500 bg-white h-12 rounded-lg px-5'>copy</button>
+          <button className=' text-orange-500 bg-white h-12 rounded-lg px-5'
+            onClick={copyPassToClip}
+          >copy</button>
         </div>
         <div>
           <input type="range" className=' m-5'
